@@ -2,13 +2,15 @@ FROM centos:7
 RUN yum update -y
 RUN yum install epel-release \
         wget gcc make zlib-devel libffi-devel bind-utils \
-        openssl-devel openldap-devel crontabs.noarch -y
+        openssl-devel openldap-devel crontabs.noarch -y \
+        && yum clean all
 
 ADD Python-3.7.4.tgz .
 RUN cd Python-3.7.4 \
     && ./configure --with-ssl \
     && make && make install \
-    && make clean
+    && make clean \
+    && rm -rf *
 
 RUN mv /usr/bin/python /usr/bin/python.bak \
     && ln -s /usr/local/bin/python3 /usr/bin/python \
